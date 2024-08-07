@@ -1,0 +1,38 @@
+{% extends 'base_with_navbar.html' %}
+
+{% block title %} Ad Request {% endblock title %}
+{% block content %}
+<div class="container-fluid">
+    <h1 class = 'text-center'> Send Ad Request</h1>
+    <form method = 'POST' action="/ad_request">
+        <div class = 'container-fluid mb-3 col-6 align-center' >
+            <label for= "sponsor_id" class = 'form-label'>Sponsor Name</label>
+            <input type = 'text'  class = 'form-control' id='sponsor_id' name ='sponsor_id' value = {{spons_id}} required >
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center' >
+            <label for="message" class = 'form-label'>Message</label>
+            <input type = 'text'  class = 'form-control' id='message' name ='message' required>
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center' >
+            <label for="deliverables" class = 'form-label'>Deliverables</label>
+            <input type = 'text'  class = 'form-control' id='deliverables' name ='deliverables' required>
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center' >
+            <label for="payment" class = 'form-label'>Budget</label>
+            <input type = 'integer'  class = 'form-control' id='payment' name ='payment' required>
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center'>
+            <label for="status" class="form-label">Status</label>
+            <select class="form-select" id="status" name="status" required>
+                <option value="pending">Pending</option>
+                <option value="accepted">Accepted</option>
+                <option value="rejected">Rejected</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Ad Request</button>
+    </form>
+
+    
+</div>
+
+{% endblock content %}

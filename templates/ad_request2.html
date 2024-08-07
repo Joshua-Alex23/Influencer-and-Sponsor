@@ -1,0 +1,48 @@
+{% extends 'base_with_navbar.html' %}
+
+{% block title %} Ad Request {% endblock title %}
+{% block content %}
+    {% for user in User%}
+        <h1>{{user.username}}</h1>
+        <h3>{{user.city}}</h3>
+            {{}}
+        {%endif%}
+    {%endfor%}
+
+{% endblock content%}
+
+{% extends 'base_with_navbar.html' %}
+
+{% block content %}
+    {% if session['username'] %}
+        {%for campaign in Campaign%}
+            <!-- <div class="container-fluid">
+                <h1>{{campaign.name_of_campaign}}</h1>
+                <p>{{campaign.description}}</p>
+                <div class="row">
+                <!-- {% for niche in category.niche %}
+                    <div class="card col-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{niche.name}}</h5>
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="card-text">Price: Rs {{product.selling_price}}</p>
+                                </div>
+                                <div class="col-6">
+                                   <p class="card-text">Available Qty: {{product.stock}}</p>
+                                </div>
+                            </div>
+                            {% if session['role'] == 'Sponsor' %}
+                                <a href={{url_for('edit_campaign', id=product.id)}} class="btn btn-primary">Edit</a>
+                                <a href={{url_for('delete_campaign', id=product.id)}} class="btn btn-danger">Delete</a>
+                            {% endif %}
+                        </div>  
+                    </div>
+                {% endfor %} -->
+                </div>  
+            </div> -->
+        {%endfor%}
+    {% else %}
+        <h1>Welcome {{session['username']}}</h1>
+    {% endif %}
+{% endblock content %}

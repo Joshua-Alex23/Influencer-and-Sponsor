@@ -1,0 +1,67 @@
+{% extends 'base_with_navbar.html' %}
+
+{% block title %} Registration {% endblock title %}
+#change text input to password
+{% block content %}
+<div class = 'container-fluid col-10 align-center'>
+    <h1 class = "text-center - 5">Registration</h1>
+    <form method ='POST' action ='/register' >
+        <div class = 'container-fluid mb-3 col-4 align-center'>
+            <label for='username' class ='form-label'>Username</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center' >
+            <label for="password" class = 'form-label'>Password</label>
+            <input type = 'text'  class = 'form-control' id='password' name ='password' required> 
+            
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center'>
+            <label for="confirm-password" class = 'form-label'>Confirm-Password</label>
+            <input type = 'text'  class = 'form-control' id='confirm_password' name ='confirm_password' required>
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center'>
+            <label for="email" class = 'form-label'>Email</label>
+            <input type = 'text'  class = 'form-control' id='email' name ='email' required>
+        </div>
+        <div class = 'container-fluid mb-3 col-6 align-center' >
+            <label for="address" class = 'form-label'>Address</label>
+            <input type = 'text'  class = 'form-control' id='address' name ='address' required>
+        </div>
+        <div class="container-fluid mb-3 col-6 align-center">
+            <label for="dob" class="form-label">Date of Birth</label>
+            <input type="date" class="form-control" id="dob" name="dob" required>
+        </div>
+        <div class = 'container-fluid mb-3 col-6 align-center' >
+            <label for="city" class = 'form-label'>City</label>
+            <input type = 'text'  class = 'form-control' id='city' name ='city' required>
+        </div>
+        <div class = 'container-fluid mb-3 col-6 align-center' >
+            <label for="state" class = 'form-label'>State</label>
+            <input type = 'text'  class = 'form-control' id='state' name ='state' required>
+        </div>
+        <div class = 'container-fluid mb-3 col-6 align-center' >
+            <label for="country" class = 'form-label'>Country</label>
+            <input type = 'text'  class = 'form-control' id='country' name ='country' required>
+        </div>
+        <div class = 'mb-3'>
+            <label for="role" class="form-label">Role</label>
+            <select class="form-select" id="role" name="role" required>
+                <option value="Influencer">Influencer</option>
+                <option value="Sponsor">Sponsor</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class = 'container-fluid col-10 align-center'>
+<!--         
+            <h1 class = "text-center - 5">Choose to register as Influencer or Sponsor</h1>
+            <a href ='/register_inf.html' class = 'align-center'>
+                <button class = 'btn btn-primary'>Register as Influencer</button>
+            </a>
+            <a href ='/register_spo.html' class = 'align-center'>
+                <button class = 'btn btn-primary'>Register as Sponsor</button>
+            </a>
+        </div> -->
+    </form>
+        
+</div>
+{% endblock content %}

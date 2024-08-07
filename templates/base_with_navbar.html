@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<!-- Navbar -->
+{% include 'Navbar.html' %}
+<!-- Main Content-->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-info">
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        <button type="button" class ='btn-close' data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+{% endwith %}
+{% block content %}
+{% endblock content %}
+<!-- Footer -->
+
+{% endblock body %}

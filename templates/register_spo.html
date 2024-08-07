@@ -1,0 +1,38 @@
+{% extends 'base_with_navbar.html' %}
+
+{% block title %} Registration - Sponsor {% endblock title %}
+
+{% block content %}
+<div class = 'container-fluid col-10 align-center'>
+    <h1 class = "text-center - 5">Registration as Sponsor</h1>
+    <form method ='POST' action ='/register_spo'>
+        <div class = 'container-fluid mb-3 col-4 align-center'>
+            <div class = 'container-fluid mb-3 col-4 align-center' >
+                <label for= "username" class = 'form-label'>Username</label>
+                <input type = 'text'  class = 'form-control' id='username' name ='username' value = {{data_name}} required>
+            </div>
+            <div class = 'container-fluid mb-3 col-4 align-center' >
+                <label for= "id" class = 'form-label'></label>
+                <input type = 'text'  class = 'form-control' id='id' name ='id' value = {{data_id}} hidden required>
+            </div>
+            <div class = 'container-fluid mb-3 col-4 align-center' >
+                <label for= "email_id" class = 'form-label'></label>
+                <input type = 'text'  class = 'form-control' id='email_id' name ='email_id' value = {{data_email}} hidden required>
+            </div>
+            <label for='industry' class ='form-label'>Industry</label>
+            <input type="text" class="form-control" id="industry" name="industry" required>
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center' >
+            <label for="budget" class = 'form-label'>Budget</label>
+            <input type = 'text'  class = 'form-control' id='budget' name ='budget' required>
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center'>
+            <label for="industry_description" class = 'form-label'>Industry Description</label>
+            <input type = 'text'  class = 'form-control' id='industry_description' name ='industry_description' required>
+        </div>
+        
+        <button type="submit" class="btn-primary">Register as Sponsor</button>
+    </form>
+</div>
+
+{% endblock content %}

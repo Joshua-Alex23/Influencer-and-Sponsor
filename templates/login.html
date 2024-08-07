@@ -1,0 +1,20 @@
+{% extends 'base_with_navbar.html' %}
+{% block title %}Welcome to the Login Page{% endblock title %}
+
+{% block content%}
+<div class = 'container-fluid'> 
+    <h1> Login </h1>
+    <form method = 'post' action="/login"
+        <div class = 'mb-3 col-6' >
+            <label for = "username" class = 'form-login'>Username</label>
+            <input type="text" class="form-control" id = 'username' name = 'username' required>
+        </div>
+        <div class = 'mb-3 col-6'>
+            <label for = 'password' class = 'form-login'>Password</label>
+            <input type="text" class="form-control" id = 'password' name = 'password' required>
+        </div>
+        <button type="submit" class=" btn_primary"> Login </button>
+    </form>
+</div>
+
+{% endblock content%}
