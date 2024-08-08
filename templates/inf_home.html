@@ -2,6 +2,7 @@
 
 {% block content %}
     {% for camp in campaign %}
+        {% if camp.visibility == "Public" %}
         <div class="card col-3">
             <div class="card body">
                 <h5 class="card title"> {{camp.name_of_campaign}}</h5>
@@ -9,5 +10,6 @@
                 <p class = 'card budget'>{{camp.Budget}}</p>
             </div>
         </div>
+        {% endif %}
     {% endfor %}
 {% endblock content %}

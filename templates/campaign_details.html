@@ -1,0 +1,54 @@
+{% extends 'base_with_navbar.html' %}
+
+{% block title %} View - Campaign {% endblock title%}
+
+{% block content %} 
+<div class = 'container-fluid col - 10 align-center'>
+    <h1 class = 'text-center'> Campaign Details</h1>
+        <form method = 'POST' action={{"/campaign_details/" + campaign.id | string }}>
+            <div class = 'container-fluid mb-3 col-6 align-center' >
+                <label for="name_of_campaign" class = 'form-label'>Name of Campaign</label>
+                <input type = 'text'  class = 'form-control' id='name_of_campaign' name ='name_of_campaign' value={{campaign.name_of_campaign}} readonly>
+            </div>
+            <div class = 'container-fluid mb-3 col-6 align-center' >
+                <label for="description" class = 'form-label'>Description</label>
+                <input type = 'text'  class = 'form-control' id='description' value = {{campaign.description}} name ='description' readonly>
+            </div>
+            <div class = 'container-fluid mb-3 col-6 align-center' >
+                <label for="budget" class = 'form-label'>Budget</label>
+                <input type = 'text'  class = 'form-control' id='budget' name ='budget' value = {{campaign.Budget}} readonly>
+            </div>
+            <div class="container-fluid mb-3 col-6 align-center">
+                <label for="start_date" class="form-label">Start Date</label>
+                <input type="date" class="form-control" id="start_date" name="start_date" value= {{campaign.start_date}} readonly>
+            </div>
+            <div class="container-fluid mb-3 col-6 align-center">
+                <label for="end_date" class="form-label">End Date</label>
+                <input type="date" class="form-control" id="end_date" name="end_date" value= {{campaign.end_date}} readonly>
+            </div>
+            <div class = 'container-fluid mb-3 col-6 align-center'>
+                <label for="niche" class="form-label">Niche</label>
+                <select class="text" id="niche" name="niche" value = {{campaign.niche}} readonly>
+                    <option value="beauty">Beauty</option>
+                    <option value="healthandfitness">Health and Fitness</option>
+                    <option value="technology">Technology</option>
+                    <option value="travel">Travel</option>
+                    <option value="fashion">Fashion</option>
+                    <option value="business">Business</option>
+                    <option value="lifestyle">Lifestyle</option>
+                    <option value="gaming">Gaming</option>
+                    <option value="animals">Animals</option>
+                    <option value="relationships">Relationships</option>
+                    
+                </select>
+            </div>
+            <div class = 'container-fluid mb-3 col-6 align-center'>
+                <label for="visibility" class="form-label">Visibility</label>
+                <select class="text" id="visibility" name="visibility" value = {{campaign.visibility}} readonly>
+                    <option value="Public">Public</option>
+                    <option value="Private">Private</option>
+                </select>
+            </div>
+        </form>
+</div>
+{% endblock content%}

@@ -5,15 +5,20 @@
     <h1>Welcome Sponsor</h1>
     <p>Here you'll be able to find other Influencer</p>
     {% for camp in campaign %}
-        {% if camp.sponsor_id == spons_id %}
         <div class="card col-3">
             <div class="card body">
                 <h5 class="card title"> {{camp.name_of_campaign}}</h5>
                 <p class ="card description"> {{camp.description}}</p>
                 <p class = 'card budget'>{{camp.Budget}}</p>
+                <a href="/campaign_details/{{ camp.id }}" id = camp.id}} class="btn btn-primary">Details</a>
+                <a href="/edit_campaign/{{ camp.id }}" id = camp.id}} class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Edit
+
+                </a>
+                <a href= class="btn btn-secondary">Delete</a>
             </div>
         </div>
-        {% endif %}
     {% endfor %}
     
         

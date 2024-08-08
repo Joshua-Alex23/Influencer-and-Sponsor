@@ -16,7 +16,6 @@
             {% if session['Role'] == 'Sponsor' %}
             <li class="nav-item">
                 <a class="nav-link" href={{ url_for('add_campaign')}}>Add Campaign</a>
-                <a class = "nav-link" href={{url_for('edit_campaign')}}>Edit Campaign</a>
             </li>
             {% endif %}
             {% if session['Role'] == Sponsor %}
