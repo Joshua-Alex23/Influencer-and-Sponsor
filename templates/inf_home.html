@@ -1,5 +1,13 @@
 {% extends 'base_with_navbar.html' %}
 
 {% block content %}
-    
+    {% for camp in campaign %}
+        <div class="card col-3">
+            <div class="card body">
+                <h5 class="card title"> {{camp.name_of_campaign}}</h5>
+                <p class ="card description"> {{camp.description}}</p>
+                <p class = 'card budget'>{{camp.Budget}}</p>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock content %}

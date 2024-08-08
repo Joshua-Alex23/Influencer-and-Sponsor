@@ -1,6 +1,12 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand h-1" href={{ url_for('home_page')}}>Influencer and Sponsors Site</a>
+        {% if session['Role'] == 'Sponsor'%}
+            <a class="navbar-brand h-1" href={{ url_for('spo_home')}}>The Hive</a>
+        {% elif session['Role']=='Influencer' %}
+            <a class="navbar-brand h-1" href={{ url_for('inf_home')}}>The Hive</a>
+        {% else %}
+        <a class="navbar-brand h-1" href={{ url_for('home_page')}}>The Hive</a>
+        {% endif %}
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>

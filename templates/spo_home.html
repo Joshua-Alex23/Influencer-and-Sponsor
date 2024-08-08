@@ -1,6 +1,21 @@
 {% extends 'base_with_navbar.html' %}
 
 {% block content %}
+<form>
     <h1>Welcome Sponsor</h1>
     <p>Here you'll be able to find other Influencer</p>
+    {% for camp in campaign %}
+        {% if camp.sponsor_id == spons_id %}
+        <div class="card col-3">
+            <div class="card body">
+                <h5 class="card title"> {{camp.name_of_campaign}}</h5>
+                <p class ="card description"> {{camp.description}}</p>
+                <p class = 'card budget'>{{camp.Budget}}</p>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+    
+        
+</form>
 {% endblock content %}

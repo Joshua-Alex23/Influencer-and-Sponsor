@@ -1,11 +1,11 @@
 {% extends 'base_with_navbar.html' %}
 
-{% block title %} Add - Campaign {% endbock title%}
+{% block title %} Edit - Campaign {% endbock title%}
 
 {% block content %} #continue with creating add campaign
 <div class = 'container-fluid col - 10 align-center'>
     <h1 class = 'text-center'> Edit Campaign</h1>
-    <form method = 'POST' action={{"/edit_campaign/" + Campaign.id | string}}>
+    <form method = 'POST' action={{ "/edit_campaign/" + camp.id | string }}>
         <div class = 'container-fluid mb-3 col-6 align-center' >
             <label for="description" class = 'form-label'>Description</label>
             <input type = 'text'  class = 'form-control' id='description' value = "Campaign.description" name ='description' required>

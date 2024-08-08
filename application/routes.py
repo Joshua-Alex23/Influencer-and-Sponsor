@@ -36,19 +36,23 @@ def login():
         if password != user.password:
             flash('Password is incorrect, please check')
             return redirect(url_for('login'))
+        campaign = Campaign.query.all()
+        #print(campaign)
         
         session['username'] = user.username
         session['Role'] = user.role[0].name
 
         #Displaying campaign for sponsor
-        user = session['username']
-        get_user = User.query.filter_by(username = user).first()
-        userid = get_user.id
-        getspons_id = Sponsor.query.filter_by(user_id = userid).first()
-        spons_id = getspons_id.id
-        camp = Campaign.query.filter_by(sponsor_id = spons_id).first()
-        #print(camp)
-        #continue here!
+        if session['Role'] == 'Sponsor':
+            user = session['username']
+            get_user = User.query.filter_by(username = user).first()
+            userid = get_user.id
+            getspons = Sponsor.query.filter_by(user_id = userid).first()
+            spons_id = getspons.id
+            camps = Campaign.query.filter_by(sponsor_id = userid).first()
+            #posts = Campaign.query.filter_by(sponsor_id = camps).all()
+        else:
+            pass
 
 
 
@@ -56,17 +60,25 @@ def login():
 
         #if session['username'] == 'admin' and session['Role'] == 'admin' and :
 
-        campaign = Campaign.query.filter_by()
         flash('Login Successful!')
         if session['Role'] == 'Influencer':
-            return render_template('inf_home.html',Campaign = camp)
+             return render_template('inf_home.html', campaign = campaign) #Campaign = camp
         if session['Role'] == 'Sponsor':
-            return render_template('spo_home.html')
+            return render_template('spo_home.html', campaign = campaign, spons_id = spons_id)
         else:
             return render_template('admin_home.html')
 @app.route('/home_page')
 def home_page():
-    return render_template('home.html')    
+    return render_template('home.html')   
+
+@app.route('/inf_home')
+def inf_home():
+    return render_template('inf_home.html')
+
+@app.route('/spo_home')
+def spo_home():
+    return render_template('spo_home.html')
+
 @app.route('/logout')
 def logout():
     session.pop('username',None)
@@ -157,6 +169,7 @@ def register_inf():
         new_inf =Influencer(industry = industry, niche = niche, platform_preference = platform_preference, reach = reach, following = following,name = username, user_id = id, email_id = email_id)
         db.session.add(new_inf)
         db.session.commit()
+        flash('Influencer Profile created successfully, please continue to login')
         return redirect(url_for('home_page'))
             #role ask if necessary if doing the registration pages individually
 
@@ -176,6 +189,7 @@ def register_spo():
         new_spo = Sponsor(industry = industry, budget = budget, industry_description = industry_description, name = username, user_id = id, email_id = email_id)
         db.session.add(new_spo)
         db.session.commit()
+        flash('Sponsor Profile created successfully, please continue to login')
         return redirect(url_for('home_page'))
         #role ask if necessary if doing the registration pages individually
 
@@ -205,25 +219,25 @@ def add_campaign():
         if not name_of_campaign or not description or not budget or not start_date or not end_date or not niche or not visibility:
             flash('Please enter all details')
             return redirect(url_for('add_campaign'))
-        
-        user = session['username']
-        get_user = User.query.filter_by(username=user).first()
-        userid=get_user.id
-        get_spons=Sponsor.query.filter_by(user_id=userid).first()
-        sponsid = get_spons.id
-        spons_name = get_spons.name
-        print(spons_name)
-        print(sponsid)
+        if session['Role']=='Sponsor':
+            user = session['username']
+            get_user = User.query.filter_by(username=user).first()
+            userid=get_user.id
+            get_spons=Sponsor.query.filter_by(user_id=userid).first()
+            sponsid = get_spons.id
+            spons_name = get_spons.name
+            
         
 
         campaign = Campaign(name_of_campaign = name_of_campaign, description = description, Budget = budget, start_date = start_date, end_date = end_date, niche = niche, visibility = visibility, sponsor_id = sponsid )
-        print(sponsid) 
         db.session.add(campaign)
         db.session.commit()
-    if visibility == 'Public':
-        return render_template('home.html', spons_name = spons_name)
-    if visibility == 'Private':
-        return render_template('home.html', data_name = get_spons.name)
+        flash('Campaign has been created.')
+        return render_template('spo_home.html')
+    # if visibility == 'Public':
+    #     return render_template('spo_home.html', spons_name = spons_name)
+    # if visibility == 'Private':
+    #     return render_template('spo_home.html', data_name = get_spons.name)
 
 @app.route('/ad_request', methods = ['GET', 'POST'])
 def ad_request():
@@ -275,16 +289,18 @@ def ad_request():
         db.session.commit()
         return render_template('home.html')
     
-@app.route('/edit_campaign/int:id', methods = ['GET', 'POST'])
-def edit_campaign():
+@app.route('/edit_campaign/<int:spons_id>', methods = ['GET', 'POST'])
+def edit_campaign(spons_id):#change this to spons_id similar to login
+    
     if session['Role'] == Influencer:
         flash('You are not authorised to edit this Campaign')
         return redirect(url_for('index')) #check home_page
     if request.method == 'GET':
-        camp = Campaign.query.get(id) # select with respect to sponsor id
+        camp = Campaign.query.get(spons_id) # select with respect to sponsor id
+        camp_id = Campaign.query.filter_by()
         if not camp: 
             flash('Campaign not found')
-            return redirect(url_for('index'))
+            return redirect(url_for('spo_home'))
         return render_template('edit_campaign.html',camp = camp)
     
     if request.method == 'POST':
@@ -297,7 +313,7 @@ def edit_campaign():
         niche = request.form['niche']
         visibility = request.form['visibility']
         #sponsor_id = request.form['sponsor_id']
-
+        print(campaign)
         # need to add verification of data and role.
         start_date = datetime.strptime(start_date, '%Y-%m-%d')
         end_date = datetime.strptime(end_date, '%Y-%m-%d')
@@ -321,7 +337,7 @@ def edit_campaign():
         
         db.session.commit()
         flash('Campaign updated succesfully')
-        return redirect(url_for(home_page))
+        return redirect(url_for(spo_home))
     
     
 @app.route('/delete_campaign/<int:id>')
