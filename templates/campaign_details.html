@@ -28,26 +28,13 @@
             </div>
             <div class = 'container-fluid mb-3 col-6 align-center'>
                 <label for="niche" class="form-label">Niche</label>
-                <select class="text" id="niche" name="niche" value = {{campaign.niche}} readonly>
-                    <option value="beauty">Beauty</option>
-                    <option value="healthandfitness">Health and Fitness</option>
-                    <option value="technology">Technology</option>
-                    <option value="travel">Travel</option>
-                    <option value="fashion">Fashion</option>
-                    <option value="business">Business</option>
-                    <option value="lifestyle">Lifestyle</option>
-                    <option value="gaming">Gaming</option>
-                    <option value="animals">Animals</option>
-                    <option value="relationships">Relationships</option>
-                    
-                </select>
+                <input type="text" class="form-control" id="niche" name="niche" value = {{campaign.niche}} readonly>
+                   
             </div>
             <div class = 'container-fluid mb-3 col-6 align-center'>
                 <label for="visibility" class="form-label">Visibility</label>
-                <select class="text" id="visibility" name="visibility" value = {{campaign.visibility}} readonly>
-                    <option value="Public">Public</option>
-                    <option value="Private">Private</option>
-                </select>
+                <input type="text" class="form-control" id="visibility" name="visibility" value = {{campaign.visibility}} readonly>
+                   
             </div>
         </form>
 </div>

@@ -73,7 +73,8 @@ def home_page():
 
 @app.route('/inf_home')
 def inf_home():
-    return render_template('inf_home.html')
+    campaign = Campaign.query.all()
+    return render_template('inf_home.html', campaign = campaign)
 
 @app.route('/spo_home')
 def spo_home():
@@ -146,12 +147,6 @@ def register():
         if filled_role.name == 'Sponsor':
             return render_template('register_spo.html', data_name = get_user.username, data_id = get_user.id, data_email = get_user.email)
     
-# @app.route('/register/<int:id>',methods= ['GET','POST'])
-# def choose(id):
-#     if request.method == 'GET':
-#         return render_template('choose.html',id = id)
-#     #if request.method == 'POST':
-
 
 @app.route('/register_inf', methods= ['GET','POST']) #continue to query user_id from previous step
 def register_inf():
@@ -262,6 +257,7 @@ def ad_request():
         # userid = get_user.id
         # getcamp_id = Campaign.query.filter_by(id = userid).first()
         # camp_id = getcamp_id.id
+        inf = Influencer.query.
 
         return render_template('ad_request.html', spons_id = spons_id)
     if request.method == 'POST':
@@ -340,25 +336,25 @@ def edit_campaign(id):#change this to spons_id similar to login
         flash('Campaign updated succesfully')
         return redirect(url_for('spo_home'))
     
-# @app.route('/campaign_details/<int:id>/', methods = ['GET'])
-# def campaign_details(id):#change this to spons_id similar to login
+@app.route('/campaign_details/<int:id>/', methods = ['GET'])
+def campaign_details(id):#change this to spons_id similar to login
 
-#     if request.method == 'GET':
-#         campaign = Campaign.query.get(id)
-#         if not campaign: 
-#             flash('Campaign not found')
-#             return redirect(url_for('spo_home'))
-#         #print(camp)
-#         return render_template('campaign_details.html',campaign = campaign)
+    if request.method == 'GET':
+        campaign = Campaign.query.get(id)
+        if not campaign: 
+            flash('Campaign not found')
+            return redirect(url_for('spo_home'))
+        #print(camp)
+        return render_template('campaign_details.html',campaign = campaign)
 
 
-@app.route('/delete_campaign/<int:spons_id>')
-def delete_campaign(spons_id):
+@app.route('/delete_campaign/<int:id>')
+def delete_campaign(id):
     if session['Role'] =='Influencer':
         flash('You are not authorized to delete product')
         return redirect(url_for('spo_home'))
     
-    campaign = Campaign.query.get(spons_id)
+    campaign = Campaign.query.get(id)
     if not campaign:
         flash('Campaign not found')
         return redirect(url_for('spo_home'))

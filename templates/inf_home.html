@@ -8,6 +8,10 @@
                 <h5 class="card title"> {{camp.name_of_campaign}}</h5>
                 <p class ="card description"> {{camp.description}}</p>
                 <p class = 'card budget'>{{camp.Budget}}</p>
+                <a href="/campaign_details/{{ camp.id }}" id = camp.id}} class="btn btn-primary">
+                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    Details
+                </a>
             </div>
         </div>
         {% endif %}
