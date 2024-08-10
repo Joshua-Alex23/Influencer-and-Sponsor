@@ -3,4 +3,57 @@
 {% block content %}
     <h1>Welcome Admin</h1>
     <p></p>
+    <button class="btn btn-primary" onclick="window.print();">
+        <i class="fas fa-print"></i>
+        Print
+    </button>
+    {% for camp in campaign %}
+    <div class="card col-3">
+        <div class="card body">
+            <h5 class="card title">Name: {{camp.name_of_campaign}}</h5>
+            <p class ="card description">Description: {{camp.description}}</p>
+            <p class = 'card budget'>Budget: {{camp.Budget}}</p>
+            <a href="/campaign_details/{{ camp.id }}" id = camp.id}} class="btn btn-primary">
+                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                Details
+            </a>
+            
+        </div>
+    </div>
+    {% endfor %}
+
+
+<hr>
+<h2 class="display-2">Summary Statistics</h2>
+<div>
+    <canvas id="myChart"></canvas>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    const ctx = document.getElementById('myChart');
+  
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Influencer', 'Sponsor'],
+        datasets: [{
+          label: 'Split of Users on the Platform',
+          data: [{{inf}},{{spo}}],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+  
+   
+
 {% endblock content %}

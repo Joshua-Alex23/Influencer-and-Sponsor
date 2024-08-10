@@ -5,13 +5,18 @@
         {% if camp.visibility == "Public" %}
         <div class="card col-3">
             <div class="card body">
-                <h5 class="card title"> {{camp.name_of_campaign}}</h5>
-                <p class ="card description"> {{camp.description}}</p>
-                <p class = 'card budget'>{{camp.Budget}}</p>
+                <h5 class="card title">Name: {{camp.name_of_campaign}}</h5>
+                <p class ="card description">Description: {{camp.description}}</p>
+                <p class = 'card budget'>Budget: {{camp.Budget}}</p>
                 <a href="/campaign_details/{{ camp.id }}" id = camp.id}} class="btn btn-primary">
                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                     Details
                 </a>
+                <a href="/send_request/{{ camp.id }}" id = camp.id}} class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Send Request
+                </a>
+                
             </div>
         </div>
         {% endif %}

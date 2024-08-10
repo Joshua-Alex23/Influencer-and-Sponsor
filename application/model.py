@@ -83,6 +83,8 @@ class Sponsor(db.Model):
          return f'<Sponsor {self.name}>'
     def __repr__(self):
         return f'{self.user_id}'
+    def __repr__(self):
+        return f'{self.id}'
 
 
 
@@ -108,7 +110,7 @@ class AdRequest(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     campaign_id = db.Column(db.Integer, db.ForeignKey(Campaign.id))
     sponsor_id = db.Column(db.Integer, db.ForeignKey(Sponsor.id))
-    Influencer_id = db.Column(db.Integer, db.ForeignKey(Influencer.id))
+    Influencer_id = db.Column(db.Integer, db.ForeignKey(Influencer.id)) #Change I to i
     message = db.Column(db.String(225), nullable = False)
     deliverables = db.Column(db.String(225), nullable = False)
     payment = db.Column(db.Integer, nullable = False)

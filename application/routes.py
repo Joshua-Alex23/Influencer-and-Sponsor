@@ -36,26 +36,35 @@ def login():
         if password != user.password:
             flash('Password is incorrect, please check')
             return redirect(url_for('login'))
+        
+        
         campaign = Campaign.query.all()
+        niche = [camp.niche for camp in campaign]
+        #niche_len = [len(camp.niche for camp in campaign)]
+        users = User.query.all()
+        user_id = [user.id for user in users]
+        inf = Influencer.query.count()
+        print(inf)
+        spo = Sponsor.query.count()
         #print(campaign)
         
         session['username'] = user.username
         session['Role'] = user.role[0].name
 
         #Displaying campaign for sponsor
-        if session['Role'] == 'Sponsor':
-            user = session['username']
-            get_user = User.query.filter_by(username = user).first()
-            userid = get_user.id
-            getspons = Sponsor.query.filter_by(user_id = userid).first()
-            spons_id = getspons.id
-            camps = Campaign.query.filter_by(sponsor_id = userid).first()
-            #posts = Campaign.query.filter_by(sponsor_id = camps).all()
-        else:
-            pass
+        # if session['Role'] == 'Sponsor':
+        #     user = session['username']
+        #     get_user = User.query.filter_by(username = user).first()
+        #     userid = get_user.id
+        #     getspons = Sponsor.query.filter_by(user_id = userid).first()
+        #     spons_id = getspons.id
+        #     camps = Campaign.query.filter_by(sponsor_id = userid).first()
+        #     #posts = Campaign.query.filter_by(sponsor_id = camps).all()
+        # else:
+        #     pass
 
 
-
+        
 
 
         #if session['username'] == 'admin' and session['Role'] == 'admin' and :
@@ -66,10 +75,15 @@ def login():
         if session['Role'] == 'Sponsor':
             return render_template('spo_home.html', campaign = campaign) #spons_id = spons_id
         else:
-            return render_template('admin_home.html')
+            return render_template('admin_home.html',campaign = campaign, user_id = user_id, niche = niche, inf = int(inf), spo = int(spo))
 @app.route('/home_page')
 def home_page():
     return render_template('home.html')   
+
+@app.route('/admin_home')
+def admin_home():
+    
+    return render_template('admin_home.html')
 
 @app.route('/inf_home')
 def inf_home():
@@ -257,7 +271,7 @@ def ad_request():
         # userid = get_user.id
         # getcamp_id = Campaign.query.filter_by(id = userid).first()
         # camp_id = getcamp_id.id
-        inf = Influencer.query.
+        #inf = Influencer.query.
 
         return render_template('ad_request.html', spons_id = spons_id)
     if request.method == 'POST':
@@ -284,7 +298,62 @@ def ad_request():
         db.session.add(new_ad_request)
         db.session.commit()
         return render_template('home.html')
-    
+
+
+
+@app.route('/send_request/<int:id>/', methods=['GET', 'POST'])
+def send_request(id):
+    if request.method == 'GET':
+        if session['Role'] == 'Influencer':
+            camp = Campaign.query.get(id)
+            getspons = camp.sponsor_id
+            user = session['username']
+            get_user = User.query.filter_by(username=user).first()
+            userid=get_user.id
+            inf = Influencer.query.filter_by(user_id = userid).first()
+            inf_id = inf.id
+            inf_name = inf.name
+            spo = Sponsor.query.get(getspons)
+            #spo_name = spo.name
+
+            # user = session['username']
+            # get_user = User.query.filter_by(username=user).first()
+            # userid=get_user.id
+            # get_spons=Sponsor.query.filter_by(user_id=userid).first()
+            # sponsid = get_spons.id
+            # spons_name = get_spons.name
+            return render_template('send_request.html',
+                                spo_name = spo.name,
+                                spo_id = spo.id,  
+                                camp_id = camp.id, 
+                                campaign = camp.name_of_campaign, 
+                                camp_desc = camp.description, 
+                                camp_budget = camp.Budget, 
+                                inf_id = inf_id, 
+                                inf_name = inf_name)
+
+    if request.method == 'POST':
+        message = request.form['message']
+        deliverables = request.form['deliverables']
+        payment = request.form['payment']
+        status = request.form['status']
+
+        if not message or not deliverables or not payment or not status:
+            flash('Please enter all details')
+            return redirect(url_for('send_request'))
+        newrequests = AdRequest(message = message, deliverables = deliverables, payment = payment, status = status)
+        db.session.add(newrequests)
+        db.session.commit()
+        flash('Request sent successfully!')
+        return render_template('inf_home')
+        # if session['Role'] == 'Influencer':
+        #     return redirect(url_for('inf_home',campaign_id = id,sponsor_id = getspons, Influencer_id = inf_id))
+        # else:
+        #     return redirect(url_for('spo_home',campaign_id = id,sponsor_id = getspons, Influencer_id = inf_id))
+
+
+
+
 @app.route('/edit_campaign/<int:id>/', methods = ['GET', 'POST'])
 def edit_campaign(id):#change this to spons_id similar to login
     
@@ -293,7 +362,6 @@ def edit_campaign(id):#change this to spons_id similar to login
         return redirect(url_for('inf_home')) #check home_page
     if request.method == 'GET':
         campaign = Campaign.query.get(id)
-        print(campaign)
         if not campaign: 
             flash('Campaign not found')
             return redirect(url_for('spo_home'))
@@ -338,7 +406,6 @@ def edit_campaign(id):#change this to spons_id similar to login
     
 @app.route('/campaign_details/<int:id>/', methods = ['GET'])
 def campaign_details(id):#change this to spons_id similar to login
-
     if request.method == 'GET':
         campaign = Campaign.query.get(id)
         if not campaign: 
@@ -363,6 +430,11 @@ def delete_campaign(id):
     db.session.commit()
     flash('Campaign deleted successfully')
     return redirect(url_for('spo_home'))
+
+
+
+
+
 
 @app.route('/view_requests', methods=['GET', 'POST'])
 def viewrequests():

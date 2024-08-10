@@ -1,0 +1,51 @@
+{% extends 'base_with_navbar.html' %}
+
+{% block title %} Send Request to Sponsor {% endblock title%}
+
+{% block content %}
+<div class = 'container-fluid col-10 align-center'>
+    <h1 class = "text-center - 5">Send a request to Sponsor</h1>
+    <form method ='POST' action ={{"/send_request/" + campaign.id | string }}>
+        <div class = 'container-fluid mb-3 col-4 align-center'>
+            <div class = 'container-fluid mb-3 col-4 align-center' >
+                <label for= "name_of_sponsor" class = 'form-label'>Name of the Sponsor</label>
+                <input type = 'text'  class = 'form-control' id='name_of_sponsor' name ='name_of_sponsor' value = {{spo_name}} readonly>
+            </div>
+            <div class = 'container-fluid mb-3 col-4 align-center' >
+                <label for= "name_of_campaign" class = 'form-label'>Name of the Campaign</label>
+                <input type = 'text'  class = 'form-control' id='name_of_campaign' name ='name_of_campaign' value = {{campaign}} readonly>
+            </div>
+            <div class = 'container-fluid mb-3 col-4 align-center' >
+                <label for= "camp_desc" class = 'form-label'>Description</label>
+                <input type = 'text'  class = 'form-control' id='camp_desc' name ='camp_desc' value = {{camp_desc}} readonly>
+            </div>
+            <div class = 'container-fluid mb-3 col-4 align-center' >
+                <label for= "camp_budget" class = 'form-label'>Budget</label>
+                <input type = 'text'  class = 'form-control' id='camp_budget' name ='camp_budget' value = {{camp_budget}} readonly>
+            </div>
+            <div class = 'container-fluid mb-3 col-4 align-center' >
+                <label for= "inf_name" class = 'form-label'>Your Name</label>
+                <input type = 'text'  class = 'form-control' id='inf_name' name ='inf_name' value = {{inf_name}}  readonly>
+            </div>
+            <label for='message' class ='form-label'>Message</label>
+            <input type="text" class="form-control" id="message" name="message" required>
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center' >
+            <label for="deliverables" class = 'form-label'>Deliverables</label>
+            <input type = 'text'  class = 'form-control' id='deliverables' name ='deliverables' required>
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center'>
+            <label for="payment" class = 'form-label'>Payment</label>
+            <input type = 'number'  class = 'form-control' id='payment' name ='payment' required>
+        </div>
+        <div class = 'mb-3'>
+            <label for="status" class="form-label"></label>
+            <select class="form-select" id="status" name="status" hidden required>
+                <option value="pending">Pending</option>
+                <option value="accepted">Accepted</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Request</button>
+    </form>
+</div>
+{% endblock content %}
