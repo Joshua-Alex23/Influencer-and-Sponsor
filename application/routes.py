@@ -75,15 +75,23 @@ def login():
         if session['Role'] == 'Sponsor':
             return render_template('spo_home.html', campaign = campaign) #spons_id = spons_id
         else:
-            return render_template('admin_home.html',campaign = campaign, user_id = user_id, niche = niche, inf = int(inf), spo = int(spo))
+            return redirect(url_for('admin_home'))
 @app.route('/home_page')
 def home_page():
     return render_template('home.html')   
 
 @app.route('/admin_home')
 def admin_home():
-    
-    return render_template('admin_home.html')
+
+        campaign = Campaign.query.all()
+        niche = [camp.niche for camp in campaign]
+        #niche_len = [len(camp.niche for camp in campaign)]
+        users = User.query.all()
+        user_id = [user.id for user in users]
+        inf = Influencer.query.count()
+        print(inf)
+        spo = Sponsor.query.count()
+        return render_template('admin_home.html',campaign = campaign, user_id = user_id, niche = niche, inf = int(inf), spo = int(spo))
 
 @app.route('/inf_home')
 def inf_home():
