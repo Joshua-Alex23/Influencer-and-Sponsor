@@ -13,14 +13,14 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         {% if session['username'] %}
+            {% if session['Role'] == 'admin' %}
+            <li class="nav-item">
+                <a class="nav-link" href=>View Campaign</a>
+            </li>
+            {% endif %}
             {% if session['Role'] == 'Sponsor' %}
             <li class="nav-item">
                 <a class="nav-link" href={{ url_for('add_campaign')}}>Add Campaign</a>
-            </li>
-            {% endif %}
-            {% if session['Role'] == Sponsor %}
-            <li class= "nav-item">
-                <a class = "nav-link" href={{url_for('edit_campaign')}}>Edit Campaign</a>
             </li>
             {% endif %}
             {% if session['Role'] == 'Sponsor' %}
@@ -29,14 +29,14 @@
             </li>
             {% elif session['Role']== 'Influencer' %}
             <li class="nav-item">
-                <a class="nav-link" href={{ url_for('ad_request')}}> View Requests</a>
+                <a class="nav-link" href=#> View Requests</a>
             </li>
             {% endif %}
             <li class="nav-item">           
                 <a class="nav-link" href={{ url_for('logout')}}>Logout</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href='#'>Welcome {{ session['username'] }}</a>
+                <a class="nav-link" >Welcome {{ session['username'] }}</a>
             </li>
 
         {% else %}

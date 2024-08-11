@@ -1,0 +1,86 @@
+{% extends 'base_with_navbar.html' %}
+
+{% block title %} Update - Influencer {% endblock title %}
+
+{% block content %}
+<div class = 'container-fluid col-10 align-center'>
+    <h1 class = "text-center - 5">Update Influencer Profile</h1>
+    <form method ='POST' action ="/inf_update">
+        <div class = 'container-fluid mb-3 col-4 align-center' >
+            <label for= "username" class = 'form-label'>Username</label>
+            <input type = 'text'  class = 'form-control' id='username' name ='username' value = {{data_name}} required>
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center' >
+            <label for="password" class = 'form-label'>Password</label>
+            <input type = 'text'  class = 'form-control' id='password' name ='password' required> 
+            
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center'>
+            <label for="confirm-password" class = 'form-label'>Confirm-Password</label>
+            <input type = 'text'  class = 'form-control' id='confirm_password' name ='confirm_password' required>
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center'>
+            <label for="email" class = 'form-label'>Email</label>
+            <input type = 'text'  class = 'form-control' id='email' name ='email' required>
+        </div>
+        <div class = 'container-fluid mb-3 col-6 align-center' >
+            <label for="address" class = 'form-label'>Address</label>
+            <input type = 'text'  class = 'form-control' id='address' name ='address' required>
+        </div>
+        <div class="container-fluid mb-3 col-6 align-center">
+            <label for="dob" class="form-label">Date of Birth</label>
+            <input type="date" class="form-control" id="dob" name="dob" required>
+        </div>
+        <div class = 'container-fluid mb-3 col-6 align-center' >
+            <label for="city" class = 'form-label'>City</label>
+            <input type = 'text'  class = 'form-control' id='city' name ='city' required>
+        </div>
+        <div class = 'container-fluid mb-3 col-6 align-center' >
+            <label for="state" class = 'form-label'>State</label>
+            <input type = 'text'  class = 'form-control' id='state' name ='state' required>
+        </div>
+        <div class = 'container-fluid mb-3 col-6 align-center' >
+            <label for="country" class = 'form-label'>Country</label>
+            <input type = 'text'  class = 'form-control' id='country' name ='country' required>
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center'>
+            <label for='industry' class ='form-label'>Industry</label>
+            <input type="text" class="form-control" id="industry" name="industry" value={{industry}} required>
+        </div>
+        <!-- <div class = 'container-fluid mb-3 col-4 align-center' >
+            <label for="niche" class = 'form-label'>Niche</label>
+            <input type = 'text'  class = 'form-control' id='niche' name ='niche' required>
+        </div> -->
+        <div class = 'container-fluid mb-3 col-4 align-center'>
+            <label for="niche" class="form-label">Niche</label>
+            <select class="form-select" id="niche" name="niche" value={{niche}} required>
+                <option value="beauty">Beauty</option>
+                <option value="healthandfitness">Health and Fitness</option>
+                <option value="technology">Technology</option>
+                <option value="travel">Travel</option>
+                <option value="fashion">Fashion</option>
+                <option value="business">Business</option>
+                <option value="lifestyle">Lifestyle</option>
+                <option value="gaming">Gaming</option>
+                <option value="animals">Animals</option>
+                <option value="relationships">Relationships</option>
+            </select>
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center'>
+            <label for="platform_preference" class = 'form-label'>Platform-Preference</label>
+            <input type = 'text'  class = 'form-control' id='platform_preference' name ='platform_preference' value={{platform}} required>
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center'>
+            <label for="reach" class = 'form-label'>Reach</label>
+            <input type = 'text'  class = 'form-control' id='reach' name ='reach' value={{reach}} required>
+        </div>
+        <div class = 'container-fluid mb-3 col-4 align-center' >
+            <label for="following" class = 'form-label'>Following</label>
+            <input type = 'text'  class = 'form-control' id='following' name ='following' value={{following}} required>
+        </div>
+        
+        <button type="submit" class="btn-primary">Update Details</button>
+    </form>
+</div>
+
+{% endblock content %}
