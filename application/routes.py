@@ -93,6 +93,19 @@ def admin_home():
         spo = Sponsor.query.count()
         return render_template('admin_home.html',campaign = campaign, user_id = user_id, niche = niche, inf = int(inf), spo = int(spo))
 
+@app.route('/admin_campaign')
+def admin_campaign():
+
+        campaign = Campaign.query.all()
+        niche = [camp.niche for camp in campaign]
+        #niche_len = [len(camp.niche for camp in campaign)]
+        users = User.query.all()
+        user_id = [user.id for user in users]
+        inf = Influencer.query.count()
+        print(inf)
+        spo = Sponsor.query.count()
+        return render_template('admin_campaign.html',campaign = campaign, user_id = user_id, niche = niche, inf = int(inf), spo = int(spo))
+
 @app.route('/inf_home')
 def inf_home():
     campaign = Campaign.query.all()
@@ -544,32 +557,101 @@ def delete_campaign(id):
 
 
 @app.route('/view_requests', methods=['GET', 'POST'])
-def viewrequests():
+def view_requests():
+    # if request.method == 'GET':
+    #     requests = AdRequest.query.filter_by(status='pending').all()
+    #     return render_template('view_requests.html',requests = requests) # check landing page
     if request.method == 'GET':
-        if 'Role' in session and session['Role'] != 'Influencer':
-            requests = AdRequest.query.filter_by(status='pending').all()
-            return render_template('requests.html',requests = requests) # check landing page
+        user = session['username']
+        get_user = User.query.filter_by(username=user).first()
+        userid=get_user.id
+            
+        
+        if session["Role"] == 'Influencer':
+            inf = Influencer.query.filter_by(user_id = userid).first()
+            inf_id = inf.id
+            requests = AdRequest.query.filter_by(Influencer_id=inf_id, status='pending').all()
+        elif session["Role"] == 'Sponsor':
+            spo = Sponsor.query.filter_by(user_id = userid).first()
+            spo_id = spo.id
+            requests = AdRequest.query.filter_by(sponsor_id=spo_id, status='pending').all()
+        else:
+            pass
+            # requests = []  # Or handle other roles or no role appropriately
+
+        return render_template('view_requests.html', requests=requests)
        
         if 'Role' in session and session['role'] == 'store_manager':
             requests = AdRequest.query.filter_by(requester=session['user']).all()
             return render_template('requests.html',requests = requests) #check landing page
         
-@app.route('/approve_request/<int:id>')
+@app.route('/approve_request/<int:id>', methods = ['GET', 'POST'])
 def approve_request(id):
-    request = AdRequest.query.get(id)
+    adrequest = AdRequest.query.get(id)
 
-    request = AdRequest.query.filter_by(name=request.id).first()
-    if request:
-        request.status = 'rejected'
+    if adrequest:
+        adrequest.status = 'approved'  # Update status to approved
         db.session.commit()
-        return redirect(url_for('viewRequests'))
-    request = AdRequest(name=request.id, description=request.message)
-    try:
-        db.session.add(request)
-        request.status = 'approved'
+        flash('Request approved successfully', 'success')
+        return redirect(url_for('view_requests'))
+
+
+@app.route('/reject_request/<int:id>', methods = ['GET', 'POST'])
+def reject_request(id):
+    adrequest = AdRequest.query.get(id)
+
+    if adrequest:
+        adrequest.status = 'rejected'  # Update status to approved
         db.session.commit()
-        flash('Ad Request Successfull')
-        return redirect(url_for('viewRequests')) #check landing page
-    except:
-        flash('Error approving request')
-        return redirect(url_for('viewRequests'))  # check landing page
+        flash('Request rejected')
+        return redirect(url_for('view_requests'))
+    
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    if request.method == 'POST':
+        search_query = request.form.get('search', None)
+        if not search_query:
+            flash('Please enter a search keyword')
+            if session['Role'] == 'Influencer':
+                return redirect(url_for('inf_home'))
+            elif session['Role'] == 'Sponsor':
+                return redirect(url_for('spo_home'))
+            elif session['Role'] == 'admin':
+                return redirect(url_for('admin_home'))
+        
+        
+        campaigns = Campaign.query.filter(Campaign.name_of_campaign.ilike(f'%{search_query}%')).all()
+
+        influencers = Influencer.query.filter(Influencer.name.ilike(f'%{search_query}%')).all()
+        
+        if not campaigns and not influencers:
+            flash('No results found')
+            if session['Role'] == 'Influencer':
+                return redirect(url_for('inf_home'))
+            elif session['Role'] == 'Sponsor':
+                return redirect(url_for('spo_home'))
+            elif session['Role'] == 'admin':
+                return redirect(url_for('admin_home'))
+
+
+        return render_template('search.html', campaigns=campaigns, influencers=influencers)
+    if session['Role'] == 'Influencer':
+        return redirect(url_for('inf_home'))
+    elif session['Role'] == 'Sponsor':
+        return redirect(url_for('spo_home'))
+    elif session['Role'] == 'admin':
+        return redirect(url_for('admin_home'))
+
+
+# @app.route('/search',methods=['GET','POST'])
+# def search():
+#     if request.method == 'POST':
+#         search = request.form.get('search',None)
+#         if not search:
+#             flash('Please enter search keyword')
+#             return redirect(url_for('index'))
+        
+#         campaign = Campaign.query.filter(Campaign.name_of_campaign.like(f'%{search}%')).all()
+#         influencer = Influencer.query.filter(Influencer.name.like(f'%{search}%')).all()
+#         return render_template('search.html',campaign=campaign,influencer=influencer)

@@ -1,0 +1,68 @@
+{% extends 'base_with_navbar.html' %}
+
+{% block title %} View Requests received {% endblock title%}
+{% block head_content %}
+<title>View Requests</title>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    table, th, td {
+        border: 1px solid black;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
+{% endblock head_content %}
+    
+{% block content %}
+<h1>Pending Requests</h1>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Campaign</th>
+            <th>Sponsor</th>
+            <th>Influencer</th>
+            <th>Message</th>
+            <th>Deliverables</th>
+            <th>Payment</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for request in requests %}
+        <tr>
+            <td>{{ request.id }}</td>
+            <td>{{ request.campaign.name_of_campaign }}</td>
+            <td>{{ request.sponsor.name }}</td>
+            <td>{{ request.influencer.name }}</td> <!-- Access influencer's name directly -->
+            <td>{{ request.message }}</td>
+            <td>{{ request.deliverables }}</td>
+            <td>{{ request.payment }}</td>
+            <td>{{ request.status }}</td>
+            <td>
+                <a href="/approve_request/{{request.id}}" id ="approve" class="btn btn-primary">
+                    <i class="fa fa-undo" aria-hidden="true"></i>
+                    Approve
+                </a>
+            </td>
+            <td>
+                <a href="/reject_request/{{request.id}}" id ="reject" class="btn btn-danger">
+                    <i class="fa fa-undo" aria-hidden="true"></i>
+                    Reject
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>
+{% endblock %}

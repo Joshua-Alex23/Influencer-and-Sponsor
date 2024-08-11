@@ -1,6 +1,12 @@
 {% extends 'base_with_navbar.html' %}
 
+{% block title %}
+Influencer Home
+    
+{% endblock title %}
 {% block content %}
+<h1>Welcome Influencer</h1>
+    <p>Here you'll be able to all the public Campaigns</p>
     {% for camp in campaign %}
         {% if camp.visibility == "Public" %}
         <div class="card col-3">

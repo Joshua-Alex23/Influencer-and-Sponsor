@@ -1,0 +1,35 @@
+{% extends 'base_with_navbar.html' %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<div>
+    <h1>Search Results</h1>
+    
+    <div class="results">
+        <h2>Campaigns found: {{ campaigns|length }}</h2>
+        {% if campaigns %}
+            <ul>
+            {% for campaign in campaigns %}
+                <li>{{ campaign.name_of_campaign }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No campaigns found matching your search.</p>
+        {% endif %}
+    </div>
+
+    <div class="results">
+        <h2>Influencers found: {{ influencers|length }}</h2>
+        {% if influencers %}
+            <ul>
+            {% for influencer in influencers %}
+                <li>{{ influencer.name }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No influencers found matching your search.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

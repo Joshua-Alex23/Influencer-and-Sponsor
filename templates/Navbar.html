@@ -5,7 +5,7 @@
         {% elif session['Role']=='Influencer' %}
             <a class="navbar-brand h-1" href={{ url_for('inf_home')}}>The Hive</a>
         {% elif session['Role'] != 'Sponsor' or session['Role']  != 'Influencer'  %}
-            <a class="navbar-brand h-1" href={{ url_for('home_page')}}>The Hive</a>
+            <a class="navbar-brand h-1" href={{ url_for('admin_home')}}>The Hive</a>
         {% endif %}
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -15,7 +15,7 @@
         {% if session['username'] %}
             {% if session['Role'] == 'admin' %}
             <li class="nav-item">
-                <a class="nav-link" href=>View Campaign</a>
+                <a class="nav-link" href={{url_for('admin_campaign')}}>View Campaign</a>
             </li>
             {% endif %}
             {% if session['Role'] == 'Sponsor' %}
@@ -27,9 +27,12 @@
             <li class="nav-item">
                 <a class="nav-link" href={{ url_for('ad_request')}}>Send Requests</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href={{ url_for('view_requests')}}>View Requests</a>
+            </li>
             {% elif session['Role']== 'Influencer' %}
             <li class="nav-item">
-                <a class="nav-link" href=#> View Requests</a>
+                <a class="nav-link" href={{ url_for('view_requests')}}> View Requests</a>
             </li>
             {% endif %}
             <li class="nav-item">           
@@ -48,10 +51,14 @@
             </li>   
         {% endif %}
         </ul>
-        <!-- <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button> -->
+        <form action="{{ url_for('search') }}" method="POST">
+            <input type="text" name="search" placeholder="Enter search keyword">
+            <button type="submit">Search</button>
         </form>
+        <!-- <form class="d-flex" role="search" action="/search" method="post">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form> -->
       </div>
     </div>
   </nav>

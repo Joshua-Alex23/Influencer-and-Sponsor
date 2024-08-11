@@ -117,7 +117,9 @@ class AdRequest(db.Model):
     status = db.Column(db.String(80),nullable = False)#Pending or Accepted or Rejectet
 
     campaign = db.relationship('Campaign', backref='AdRequest', lazy=True) #Changing bacref from influencer to sponsor
-
+    campaign = db.relationship('Campaign', backref='requests')
+    sponsor = db.relationship('Sponsor', backref='requests')
+    influencer = db.relationship('Influencer', backref='requests')
     def __repr__(self):
         return f'<AdRequest: {self.request_type} _id_ {self.id}>'
 
