@@ -2,7 +2,7 @@
 
 {% block title %} View Requests received {% endblock title%}
 {% block head_content %}
-<title>View Requests</title>
+<title>View Requests received from Sponsors</title>
 <style>
     table {
         width: 100%;
@@ -28,12 +28,11 @@
         <tr>
             <th>ID</th>
             <th>Campaign</th>
-            <th>Sponsor</th>
-            <th>Influencer</th>
             <th>Message</th>
             <th>Deliverables</th>
             <th>Payment</th>
             <th>Status</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -41,8 +40,6 @@
         <tr>
             <td>{{ request.id }}</td>
             <td>{{ request.campaign.name_of_campaign }}</td>
-            <td>{{ request.sponsor.name }}</td>
-            <td>{{ request.influencer.name }}</td> <!-- Access influencer's name directly -->
             <td>{{ request.message }}</td>
             <td>{{ request.deliverables }}</td>
             <td>{{ request.payment }}</td>
@@ -59,6 +56,31 @@
                     Reject
                 </a>
             </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<h1>Accepted Requests</h1>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Campaign</th>
+            <th>Message</th>
+            <th>Deliverables</th>
+            <th>Payment</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for request in accepted %}
+        <tr>
+            <td>{{ request.id }}</td>
+            <td>{{ request.campaign.name_of_campaign }}</td>
+            <td>{{ request.message }}</td>
+            <td>{{ request.deliverables }}</td>
+            <td>{{ request.payment }}</td>
+            <td>{{ request.status }}</td>
         </tr>
         {% endfor %}
     </tbody>

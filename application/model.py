@@ -10,6 +10,7 @@ class User(db.Model):
     city = db.Column(db.String(80))
     state = db.Column(db.String(80))
     country = db.Column(db.String(80))
+    is_flagged = db.Column(db.Boolean, default=False)
 
     role = db.relationship('Role', secondary = 'user_role' )
 
@@ -98,7 +99,7 @@ class Campaign(db.Model):
     end_date = db.Column(db.Date, nullable = False )#continue the date command here
     niche = db.Column(db.String(225), nullable = False)
     visibility = db.Column(db.String(40),nullable = False)#Public or Private
-
+    is_flagged = db.Column(db.Boolean, default=False)  # Flag status
     
     
     def __repr__(self):
@@ -106,11 +107,11 @@ class Campaign(db.Model):
     def __repr__(self):
         return f'{self.sponsor_id}'
 
-class AdRequest(db.Model):
+class AdRequest_inf(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     campaign_id = db.Column(db.Integer, db.ForeignKey(Campaign.id))
     sponsor_id = db.Column(db.Integer, db.ForeignKey(Sponsor.id))
-    Influencer_id = db.Column(db.Integer, db.ForeignKey(Influencer.id)) #Change I to i
+    influencer_id = db.Column(db.Integer, db.ForeignKey(Influencer.id)) #Change I to i
     message = db.Column(db.String(225), nullable = False)
     deliverables = db.Column(db.String(225), nullable = False)
     payment = db.Column(db.Integer, nullable = False)
@@ -118,12 +119,25 @@ class AdRequest(db.Model):
 
     campaign = db.relationship('Campaign', backref='AdRequest', lazy=True) #Changing bacref from influencer to sponsor
     campaign = db.relationship('Campaign', backref='requests')
-    sponsor = db.relationship('Sponsor', backref='requests')
+    #sponsor = db.relationship('Sponsor', backref='requests')
     influencer = db.relationship('Influencer', backref='requests')
     def __repr__(self):
         return f'<AdRequest: {self.request_type} _id_ {self.id}>'
 
+class AdRequest_spo(db.Model):
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    campaign_id = db.Column(db.Integer, db.ForeignKey(Campaign.id))
+    sponsor_id = db.Column(db.Integer, db.ForeignKey(Sponsor.id))
+    #influencer_id = db.Column(db.Integer, db.ForeignKey(Influencer.id)) #Change I to i
+    message = db.Column(db.String(225), nullable = False)
+    deliverables = db.Column(db.String(225), nullable = False)
+    payment = db.Column(db.Integer, nullable = False)
+    status = db.Column(db.String(80),nullable = False)#Pending or Accepted or Rejectet
 
+    campaign = db.relationship('Campaign', backref='AdRequest', lazy=True) #Changing bacref from influencer to sponsor
+    #campaign = db.relationship('Campaign', backref='requests')
+    sponsor = db.relationship('Sponsor', backref='requests')
+    #influencer = db.relationship('Influencer', backref='requests')
 
 
 

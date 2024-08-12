@@ -402,13 +402,13 @@ def send_request_inf(id):
             flash('Please enter all details')
             return redirect(url_for('send_request_inf'))
         
-        newrequests = AdRequest(campaign_id = campaign_id,
-                                sponsor_id =spo_id,
-                                Influencer_id = inf_id,
-                                message = message,
-                                deliverables = deliverables,
-                                payment = payment,
-                                status = status)
+        newrequests = AdRequest_inf(campaign_id = campaign_id,
+                                    sponsor_id = spo_id,
+                                    influencer_id = inf_id,
+                                    message = message,
+                                    deliverables = deliverables,
+                                    payment = payment,
+                                    status = status)# sponsor_id =spo_id,
         db.session.add(newrequests)
         db.session.commit()
         flash('Request sent successfully!')
@@ -458,19 +458,72 @@ def send_request(id):
         if not message or not deliverables or not payment or not status:
             flash('Please enter all details')
             return redirect(url_for('send_request'))
-        newrequests = AdRequest(campaign_id = camp.id,
+        newrequests = AdRequest_spo(campaign_id = camp.id,
                                 sponsor_id =getspons,
-                                Influencer_id = inf_id,
                                 message = message,
                                 deliverables = deliverables,
                                 payment = payment,
-                                status = status)
+                                status = status) 
         db.session.add(newrequests)
         db.session.commit()
         flash('Request sent successfully!')
         return redirect(url_for('inf_home'))
+    
 
+@app.route('/edit_request/<int:id>/', methods = ['GET', 'POST'])
+def edit_request(id):
+    if session['Role'] == Influencer:
+        flash('You are not authorised to edit this Campaign')
+        return redirect(url_for('inf_home'))
+    if request.method == 'GET':
+        requests = AdRequest_inf.query.get(id)
+        inf_id = requests.influencer_id
+        inf = Influencer.query.get(inf_id)
+        camp_id = requests.campaign_id
+        camp = Campaign.query.get(camp_id)
+        camp_name = camp.name_of_campaign
 
+        return render_template('edit_request.html', requests = requests, inf_name = inf.name, camp_name = camp_name)
+    if request.method == 'POST':
+        requests = AdRequest_inf.query.get(id)
+        campaign_id = requests.campaign_id
+        message = request.form['message']
+        deliverables = request.form['deliverables']
+        payment = request.form['payment']
+        status = request.form['status']
+
+        if not message or not deliverables or not payment or not status:
+            flash('Please enter all details')
+            return redirect(url_for('view_request_spo'))
+        
+        if campaign_id:
+            requests.campaign_id = campaign_id
+        if message:
+            requests.message = message
+        if deliverables:
+            requests.deliverables = deliverables
+        if payment:
+            requests.payment = payment
+        if status:
+            requests.status = status
+        
+        db.session.commit()
+        return render_template('view_requests_spo.html')
+    
+
+@app.route('/delete_campaign/<int:id>')
+def delete_request(id):
+
+    requests = AdRequest_inf.query.get(id)
+    if not requests:
+        flash('Campaign not found')
+        return redirect(url_for('view_requests_spo'))
+    
+    db.session.delete(requests)  
+    db.session.commit()
+    return redirect(url_for('view_requests_spo'))
+
+        
 
 @app.route('/edit_campaign/<int:id>/', methods = ['GET', 'POST'])
 def edit_campaign(id):#change this to spons_id similar to login
@@ -570,42 +623,73 @@ def view_requests():
         if session["Role"] == 'Influencer':
             inf = Influencer.query.filter_by(user_id = userid).first()
             inf_id = inf.id
-            requests = AdRequest.query.filter_by(Influencer_id=inf_id, status='pending').all()
+            print(inf_id)
+            requests = AdRequest_inf.query.filter(AdRequest_inf.influencer_id == inf_id, AdRequest_inf.status == 'pending').all()
+            # camp_id = AdRequest_inf.query.get(AdRequest_inf.campaign_id) Do if time permits!!
+            # camp = Campaign.query.get(camp_id)
+            accepted = AdRequest_inf.query.filter(AdRequest_inf.influencer_id == inf_id, AdRequest_inf.status == 'approved').all()
+            return render_template('view_requests_inf.html', requests=requests, accepted = accepted)
         elif session["Role"] == 'Sponsor':
             spo = Sponsor.query.filter_by(user_id = userid).first()
             spo_id = spo.id
-            requests = AdRequest.query.filter_by(sponsor_id=spo_id, status='pending').all()
-        else:
-            pass
-            # requests = []  # Or handle other roles or no role appropriately
+            requests = AdRequest_spo.query.filter(AdRequest_spo.sponsor_id == spo_id, AdRequest_spo.status == 'pending').all()
+            accepted = AdRequest_spo.query.filter(AdRequest_spo.sponsor_id == spo_id, AdRequest_spo.status == 'approved').all()
+            sent = AdRequest_inf.query.filter(AdRequest_inf.sponsor_id == spo_id, AdRequest_inf.status == 'pending').all()
+            return render_template('view_requests_spo.html', requests = requests, accepted = accepted, sent = sent)
+        # else:
+        #     pass
+        #     # requests = []  # Or handle other roles or no role appropriately
 
-        return render_template('view_requests.html', requests=requests)
-       
-        if 'Role' in session and session['role'] == 'store_manager':
-            requests = AdRequest.query.filter_by(requester=session['user']).all()
-            return render_template('requests.html',requests = requests) #check landing page
         
+       
+        # if 'Role' in session and session['role'] == 'store_manager':
+        #     requests = AdRequest.query.filter_by(requester=session['user']).all()
+        #     return render_template('requests.html',requests = requests) #check landing page
+@app.route('/view_requests_inf')
+def view_requests_inf():
+    return render_template('view_requests_inf.html')  
+@app.route('/view_requests_spo')
+def view_requests_spo():
+    return render_template('view_requests_spo.html')     
 @app.route('/approve_request/<int:id>', methods = ['GET', 'POST'])
 def approve_request(id):
-    adrequest = AdRequest.query.get(id)
+    if session['Role'] == 'Influencer':
+        adrequest = AdRequest_inf.query.get(id)
 
-    if adrequest:
-        adrequest.status = 'approved'  # Update status to approved
-        db.session.commit()
-        flash('Request approved successfully', 'success')
-        return redirect(url_for('view_requests'))
+        if adrequest:
+            adrequest.status = 'approved'  # Update status to approved
+            db.session.commit()
+            flash('Request approved successfully', 'success')
+            return redirect(url_for('view_requests_inf'))
+        
+    elif session['Role'] == 'Sponsor':
+        adrequest = AdRequest_spo.query.get(id)
+
+        if adrequest:
+            adrequest.status = 'approved'  # Update status to approved
+            db.session.commit()
+            flash('Request approved successfully', 'success')
+            return redirect(url_for('view_requests_spo'))
 
 
 @app.route('/reject_request/<int:id>', methods = ['GET', 'POST'])
 def reject_request(id):
-    adrequest = AdRequest.query.get(id)
+    if session['Role'] == 'Influencer':
+        adrequest = AdRequest_inf.query.get(id)
 
-    if adrequest:
-        adrequest.status = 'rejected'  # Update status to approved
-        db.session.commit()
-        flash('Request rejected')
-        return redirect(url_for('view_requests'))
-    
+        if adrequest:
+            adrequest.status = 'rejected'  # Update status to approved
+            db.session.commit()
+            flash('Request rejected')
+            return redirect(url_for('view_requests_inf'))
+    elif session['Role'] == 'Sponsor':
+        adrequest = AdRequest_spo.query.get(id)
+
+        if adrequest:
+            adrequest.status = 'rejected'  # Update status to approved
+            db.session.commit()
+            flash('Request rejected')
+            return redirect(url_for('view_requests_spo'))
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
@@ -643,15 +727,26 @@ def search():
     elif session['Role'] == 'admin':
         return redirect(url_for('admin_home'))
 
+@app.route('/flag_user/<int:user_id>', methods=['POST'])
+def flag_user(user_id):
+    user = User.query.get(user_id)
+    user.is_flagged = True
+    db.session.commit()
+    flash('User has been flagged.')
+    return redirect(url_for('admin_home'))
 
-# @app.route('/search',methods=['GET','POST'])
-# def search():
-#     if request.method == 'POST':
-#         search = request.form.get('search',None)
-#         if not search:
-#             flash('Please enter search keyword')
-#             return redirect(url_for('index'))
-        
-#         campaign = Campaign.query.filter(Campaign.name_of_campaign.like(f'%{search}%')).all()
-#         influencer = Influencer.query.filter(Influencer.name.like(f'%{search}%')).all()
-#         return render_template('search.html',campaign=campaign,influencer=influencer)
+@app.route('/flag_campaign/<int:id>/', methods=['GET','POST'])
+def flag_campaign(id):
+    if request.method == 'GET':
+        pass
+    if request.method == 'POST':
+        campaign = Campaign.query.get(id)
+        campaign.is_flagged = True
+        db.session.commit()
+        flash('Campaign has been flagged.')
+        return redirect(url_for('admin_campaign'))
+
+@app.route('/admin/flagged_campaigns')
+def flagged_campaigns():
+    campaigns = Campaign.query.filter_by(is_flagged=True).all()
+    return render_template('admin_campaign.html', campaigns=campaigns) 
