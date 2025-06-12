@@ -1,0 +1,56 @@
+{% extends 'base_with_navbar.html' %}
+
+{% block title %}
+Users 
+    
+{% endblock title %}
+{% block content %}
+<h1>Active Users</h1>
+
+<div class="row">
+    {% for user in users %}
+        {% if user.is_flagged != True %}
+            {% if user.username != 'admin'%}
+                <div class="card col-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Name: {{ user.username }}</h5>
+                        <p class="card-description">Description: {{ user.email }}</p>
+                        <form action="/flag_users/{{ user.id }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fa fa-flag" aria-hidden="true"></i> Flag User
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</div>
+
+<hr>
+<h1>Flagged Users</h1>
+
+<div class="row">
+    {% for user in users %}
+        {% if user.is_flagged == True %}
+            <div class="card col-3">
+                <div class="card-body">
+                    <h5 class="card-title">Name: {{ user.username }}</h5>
+                    <p class="card-description">Email: {{ user.email }}</p>
+                    <a href="/delete_users/{{ user.id }}" class="btn btn-danger">
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Delete
+                    </a>
+                    <form action="/unflag_users/{{ user.id }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fa fa-flag" aria-hidden="true"></i> Remove flag 
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+
+
+{% endblock content %}

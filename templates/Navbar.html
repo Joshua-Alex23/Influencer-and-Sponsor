@@ -19,6 +19,9 @@
             <li class="nav-item">
                 <a class="nav-link" href={{url_for('admin_campaign')}}>View Campaign</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href={{url_for('admin_users')}}>View Users</a>
+            </li>
             {% endif %}
             {% if session['Role'] == 'Sponsor' %}
             <li class="nav-item">
@@ -35,6 +38,9 @@
             {% elif session['Role']== 'Influencer' %}
             <li class="nav-item">
                 <a class="nav-link" href={{ url_for('view_requests')}}> View Requests</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href={{ url_for('inf_update')}}> Update Profile</a>
             </li>
             {% endif %}
             <li class="nav-item">           

@@ -7,7 +7,7 @@ Admin Home
 {% block content %}
     <h1>Welcome Admin</h1>
     <p></p>
-    <button class="btn btn-primary" onclick="window.print();">
+    <!-- <button class="btn btn-primary" onclick="window.print();">
         <i class="fas fa-print"></i>
         Print
     </button>
@@ -32,7 +32,7 @@ Admin Home
               
           </div>
       </div>
-    {% endfor %}
+    {% endfor %} -->
 
 <hr>
 <h2 class="display-2">Summary Statistics</h2>
@@ -42,28 +42,34 @@ Admin Home
   
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
-  <script>
-    const ctx = document.getElementById('myChart');
+
+<script>
+    const ctx = document.getElementById('myChart').getContext('2d');
   
     new Chart(ctx, {
-      type: 'bar',
+      type: 'pie',
       data: {
         labels: ['Influencer', 'Sponsor'],
         datasets: [{
           label: 'Split of Users on the Platform',
-          data: [{{inf}},{{spo}}],
+          data: [{{ inf }}, {{ spo }}],
+          backgroundColor: ['#FF6384', '#36A2EB'],  // Example colors
           borderWidth: 1
         }]
       },
       options: {
-        scales: {
-          y: {
-            beginAtZero: true
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          tooltip: {
+            enabled: true
           }
         }
       }
     });
-  </script>
+</script>
   
    
 

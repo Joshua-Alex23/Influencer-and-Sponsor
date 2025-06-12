@@ -9,24 +9,23 @@ Campaigns
 
 <div class="row">
     {% for camp in campaign %}
-    <div class="card col-3">
-        <div class="card-body">
-            <h5 class="card-title">Name: {{ camp.name_of_campaign }}</h5>
-            <p class="card-description">Description: {{ camp.description }}</p>
-            <p class="card-budget">Budget: {{ camp.Budget }}</p>
-            <a href="/campaign_details/{{ camp.id }}" class="btn btn-primary">
-                <i class="fa fa-info-circle" aria-hidden="true"></i> Details
-            </a>
-            <a href="/delete_campaign/{{ camp.id }}" class="btn btn-danger">
-                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Delete
-            </a>
-            <form action="{{ url_for('flag_campaign', id=camp.id) }}" method="POST" style="display:inline;">
-                <button type="submit" class="btn btn-warning">
-                    <i class="fa fa-flag" aria-hidden="true"></i> Flag Campaign
-                </button>
-            </form>
-        </div>
-    </div>
+        {% if camp.is_flagged != True %}
+            <div class="card col-3">
+                <div class="card-body">
+                    <h5 class="card-title">Name: {{ camp.name_of_campaign }}</h5>
+                    <p class="card-description">Description: {{ camp.description }}</p>
+                    <p class="card-budget">Budget: {{ camp.Budget }}</p>
+                    <a href="/campaign_details/{{ camp.id }}" class="btn btn-primary">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i> Details
+                    </a>
+                    <form action="/flag_campaign/{{ camp.id }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fa fa-flag" aria-hidden="true"></i> Flag Campaign
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
     {% endfor %}
 </div>
 
@@ -34,17 +33,24 @@ Campaigns
 
 <h1>Flagged Campaigns</h1>
 <div class="row">
-    {% for camp in campaigns %}
-    <div class="card col-3">
-        <div class="card-body">
-            <h5 class="card-title">Name: {{ camp.name_of_campaign }}</h5>
-            <p class="card-description">Description: {{ camp.description }}</p>
-            <p class="card-budget">Budget: {{ camp.Budget }}</p>
-            <form action="{{ url_for('unflag_campaign', id=camp.id) }}" method="POST" style="display:inline;">
-                <button type="submit" class="btn btn-link">Unflag</button>
-            </form>
-        </div>
-    </div>
+    {% for camp in campaign %}
+        {% if camp.is_flagged == True %}
+            <div class="card col-3">
+                <div class="card-body">
+                    <h5 class="card-title">Name: {{ camp.name_of_campaign }}</h5>
+                    <p class="card-description">Description: {{ camp.description }}</p>
+                    <p class="card-budget">Budget: {{ camp.Budget }}</p>
+                    <a href="/delete_campaign/{{ camp.id }}" class="btn btn-danger">
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Delete
+                    </a>
+                    <form action="/unflag_campaign/{{ camp.id }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fa fa-flag" aria-hidden="true"></i>Remove Flag
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
     {% endfor %}
 </div>
 
